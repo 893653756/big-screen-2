@@ -22,6 +22,7 @@
 import LeftPart from "./left-part.vue";
 import RightPart from "./right-part.vue";
 import CenterPart from "./center-part.vue";
+import instance from "@/utils/request";
 export default {
   components: {
     LeftPart,
@@ -30,6 +31,14 @@ export default {
   },
   data() {
     return {};
+  },
+  mounted() {
+    this.demoApi();
+  },
+  methods: {
+    demoApi() {
+      instance.get("/api/qqq");
+    },
   },
 };
 </script>

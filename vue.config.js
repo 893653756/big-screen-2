@@ -1,5 +1,5 @@
 const path = require("path");
-
+const { prefixURL } = require("./src/config");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -7,10 +7,21 @@ function resolve(dir) {
 module.exports = {
   devServer: {
     open: true,
-    // hot: true,
     port: 4000,
     historyApiFallback: true,
+    // 请求代理
+    proxy: {
+      [prefixURL]: {
+        target: "http://192.168.0.29:8979",
+        logLevel: "debug",
+        changeOrigin: true,
+        pathRewrite: {
+          [prefixURL]: "",
+        },
+      },
+    },
   },
+
   configureWebpack() {
     return {
       resolve: {
@@ -21,6 +32,7 @@ module.exports = {
       },
     };
   },
+  // 处理 svg
   chainWebpack(config) {
     config.resolve.symlinks(true);
     config.module.rule("svg").exclude.add(resolve("src/icons"));
