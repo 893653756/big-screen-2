@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title>四川省生态环境厅</title>
+    <!-- 字体设置 -->
+    <style>
+      @font-face {
+        font-family: "DS-Digital-Italic";
+        src: url("./static/font/DS-DIGIT.TTF");
+      }
+      @font-face {
+        font-family: "DS-Digital-Bold";
+        src: url("./static/font/DS-DIGIB.TTF");
+      }
+      @font-face {
+        font-family: "PangMenZhengDao";
+        src: url("./static/font/PangMenZhengDao.ttf");
+      }
+      [pmzd] {
+        font-family: "PangMenZhengDao";
+      }
+      @font-face {
+        font-family: "YouSheBiaoTiHei";
+        src: url("./static/font/YouSheBiaoTiHei.ttf");
+      }
+      [ysbth] {
+        font-family: "YouSheBiaoTiHei";
+      }
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: rgba(#282c34, 0.1);
+        border: 3px solid transparent;
+        border-radius: 7px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(#282c34, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- svg 渐变 -->
+    <svg
+      style="width: 0; height: 0; position: absolute"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <linearGradient id="nomal-gradient" x1="0" y1="0" x2="0" y2="1">
+        `
+        <stop offset="0%" stop-color="#56C1F9" />
+        <stop offset="100%" stop-color="#AAD8EB" />
+      </linearGradient>
+    </svg>
+    <svg
+      style="width: 0; height: 0; position: absolute"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <linearGradient id="active-gradient" x1="0" y1="0" x2="0" y2="1">
+        `
+        <stop offset="0%" stop-color="#91FFFB" />
+        <stop offset="100%" stop-color="#56FFED" />
+      </linearGradient>
+    </svg>
+    <noscript>
+      <strong
+        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+        properly without JavaScript enabled. Please enable it to
+        continue.</strong
+      >
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
