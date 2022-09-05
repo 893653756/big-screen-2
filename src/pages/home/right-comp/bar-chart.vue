@@ -8,6 +8,12 @@
 import CommonChart from "@/components/CommonChart";
 import { echartMapPx } from "@/utils";
 export default {
+  props: {
+    dataList: {
+      type: Array,
+      default: () => [],
+    },
+  },
   components: {
     CommonChart,
   },
@@ -23,19 +29,28 @@ export default {
       option: {},
     };
   },
+  watch: {
+    dataList() {
+      this.initData();
+    },
+  },
   mounted() {
     this.initData();
   },
   methods: {
     initData() {
-      this.dataList = [
-        { name: "累计汇聚量", value: 270 },
-        { name: "累计审批量", value: 390 },
-        { name: "累计办结量", value: 300 },
-        { name: "累计附件量", value: 420 },
-        { name: "国垂回流量", value: 170 },
-      ];
-      this.option = this.getOption(this.dataList);
+      let list = (this.dataList || []).map((item) => ({
+        name: item.countName.slice(0, -1),
+        value: item.count_map_num,
+      }));
+      // this.dataList = [
+      //   { name: "累计汇聚量", value: 270 },
+      //   { name: "累计审批量", value: 390 },
+      //   { name: "累计办结量", value: 300 },
+      //   { name: "累计附件量", value: 420 },
+      //   { name: "国垂回流量", value: 170 },
+      // ];
+      this.option = this.getOption(list);
     },
     getOption(dataList) {
       return {
@@ -52,8 +67,8 @@ export default {
           },
           axisLabel: {
             color: "rgba(159, 242, 254, 1)",
-            fontSize: echartMapPx.mapWidth(11),
-            margin: echartMapPx.mapHeight(10)
+            fontSize: echartMapPx.mapWidth(10),
+            margin: echartMapPx.mapHeight(10),
           },
         },
         grid: {
@@ -128,7 +143,7 @@ export default {
 <style lang="scss" scoped>
 .bar-chart {
   height: vh(220);
-  padding: 0px vw(40);
+  padding: 0px vw(30);
   // background-color: rgba(255, 192, 203, 0.2);
 }
 </style>

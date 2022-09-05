@@ -2,7 +2,9 @@
   <div class="center-one">
     <div class="panel panel-1">
       <div class="panel-header">国垂总回流量</div>
-      <div class="panel-num"><BaseCountTwo :count="128" /></div>
+      <div class="panel-num">
+        <BaseCountTwo :count="countData.count_in_num || 0" />
+      </div>
 
       <div class="panel-detail">
         <LabelCount v-for="item of list_01" :key="item.label" :info="item" />
@@ -12,17 +14,21 @@
       <div class="panel-header">
         <span>全流程归集</span>
       </div>
-      <div class="panel-num"><BaseCountTwo :count="9527" /></div>
+      <div class="panel-num">
+        <BaseCountTwo :count="countData.count_num || 0" />
+      </div>
       <div class="percent">
         <span class="percent-label">总成功率</span>
-        <span class="percent-value">99.3%</span>
+        <span class="percent-value">{{ countData.count_num_bfb || 0 }}%</span>
       </div>
     </div>
     <div class="panel panel-3">
       <div class="panel-header">
         <span>省平台总同步量</span>
       </div>
-      <div class="panel-num"><BaseCountTwo :count="4399" /></div>
+      <div class="panel-num">
+        <BaseCountTwo :count="countData.count_sync_num || 0" />
+      </div>
       <div class="panel-detail">
         <LabelCount v-for="item of list_03" :key="item.label" :info="item" />
       </div>
@@ -33,25 +39,41 @@
 <script>
 import BaseCountTwo from "@/components/BaseCountTwo";
 import LabelCount from "@/components/LabelCount";
+import { mapGetters } from "vuex";
+import { StstemIdMapName } from "@/config/constent";
 export default {
   components: {
     BaseCountTwo,
     LabelCount,
   },
+  computed: {
+    ...mapGetters({
+      countData: "centerData",
+    }),
+    list_01() {
+      let systemIds = [1, 2, 5];
+      let count_data_list = this.countData.count_data_list || [];
+      let list = [];
+      count_data_list.forEach((item) => {
+        if (systemIds.includes(item.system_id)) {
+          list.push({
+            label: StstemIdMapName[item.system_id].label || item.system_name,
+            value: item.count_in_num,
+          });
+        }
+      });
+      return list
+    },
+    list_03() {
+      let count_data_list = this.countData.count_data_list || [];
+      return count_data_list.map((item) => ({
+        label: StstemIdMapName[item.system_id].label || item.system_name,
+        value: item.count_in_num,
+      }));
+    },
+  },
   data() {
     return {
-      list_01: [
-        { label: "辐射许可", value: "1357" },
-        { label: "环境评价", value: "13057" },
-        { label: "排污许可", value: "1421" },
-      ],
-      list_03: [
-        { label: "辐射许可", value: "1357" },
-        { label: "应急预案", value: "13057" },
-        { label: "环境评价", value: "1421" },
-        { label: "排污许可", value: "1421" },
-        { label: "等级报备", value: "1421" },
-      ],
     };
   },
 };
@@ -62,7 +84,7 @@ export default {
   display: flex;
   margin-top: vh(105);
   justify-content: center;
-    position: relative;
+  position: relative;
   z-index: 5;
   .panel {
     height: vh(162);

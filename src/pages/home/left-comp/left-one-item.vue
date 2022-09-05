@@ -5,7 +5,7 @@
       <img :src="iconBottom" alt="" class="icon-bottom" />
     </div>
     <BaseLabel icon="rect" :label="label" class="label" />
-    <BaseCount :count="count"> <span slot="unit">万条</span></BaseCount>
+    <BaseCount :count="count"> <span slot="unit">条</span></BaseCount>
   </div>
 </template>
 

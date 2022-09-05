@@ -12,7 +12,7 @@ module.exports = {
     // 请求代理
     proxy: {
       [prefixURL]: {
-        target: "http://192.168.0.29:8979",
+        target: "http://21802g7k45.wicp.vip:34296",
         logLevel: "debug",
         changeOrigin: true,
         pathRewrite: {

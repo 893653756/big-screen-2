@@ -8,7 +8,7 @@
         <img :src="reflectionBg" alt="" class="reflection-bg" />
         <div class="text-box">
           <div class="num-unit">
-            <div class="num">5</div>
+            <div class="num">{{ countSystemData.length }}</div>
             <div class="unit">个</div>
           </div>
           <span class="label">国垂系统深度对接</span>
@@ -19,7 +19,7 @@
           :key="item.text"
           :text="item.text"
           :isActive="item.active"
-          :class="'circle-' + index"
+          :class="'circle-' + (index + offset)"
         />
       </div>
     </div>
@@ -33,22 +33,42 @@ import CenterOne from "./center-comp/center-one.vue";
 import CenterThree from "./center-comp/center-three.vue";
 import centerBg from "@/assets/center_images/center-bg.png";
 import reflectionBg from "@/assets/center_images/reflection-bg.png";
+import { mapGetters } from "vuex";
+import { StstemIdMapName } from "@/config/constent";
 export default {
   components: {
     CenterOne,
     CenterThree,
     CircleItem,
   },
+  computed: {
+    ...mapGetters({
+      countSystemData: "countSystemData",
+      systemIndex: "systemIndex",
+    }),
+    appList() {
+      return this.countSystemData.map((item) => ({
+        text: StstemIdMapName[item.system_id].label || item.system_name,
+        icon: StstemIdMapName[item.system_id].icon,
+      }));
+    },
+    offset() {
+      if ([2, 4].includes(this.appList.length)) {
+        return 1;
+      }
+      return 0;
+    },
+  },
   data() {
     this.centerBg = centerBg;
     this.reflectionBg = reflectionBg;
-    this.appList = [
-      { text: "环境评价", icon: "hjpj", active: false },
-      { text: "登记表备案", icon: "djbba", active: false },
-      { text: "应急预案", icon: "yjya", active: true },
-      { text: "辐射安全", icon: "fsaq", active: false },
-      { text: "企业排污", icon: "qypw", active: false },
-    ];
+    // this.appList = [
+    //   { text: "环境评价", icon: "hjpj", active: false },
+    //   { text: "登记表备案", icon: "djbba", active: false },
+    //   { text: "应急预案", icon: "yjya", active: true },
+    //   { text: "辐射安全", icon: "fsaq", active: false },
+    //   { text: "企业排污", icon: "qypw", active: false },
+    // ];
     return {};
   },
 };
@@ -107,23 +127,24 @@ export default {
         }
       }
       .circle-0 {
-        top: vh(99.5);
-        left: vw(-25);
-        transform: translateX(-100%);
+        top: vh(250);
+        transform: translateX(-50%);
+        left: 50%;
       }
       .circle-1 {
         top: vh(216.5);
         left: vw(6.5);
       }
       .circle-2 {
-        top: vh(250);
-        transform: translateX(-50%);
-        left: 50%;
-      }
-      .circle-3 {
         top: vh(216.5);
         right: vw(6.5);
       }
+      .circle-3 {
+        top: vh(99.5);
+        left: vw(-25);
+        transform: translateX(-100%);
+      }
+
       .circle-4 {
         top: vh(99.5);
         right: vw(-25);

@@ -7,9 +7,16 @@
     <div class="line"></div>
     <!-- tab切换 -->
     <div class="tab-box">
-      <img :src="iconArrow" alt="" class="arrow" />
-      <i class="label">应急预案</i>
-      <img :src="iconArrow" alt="" class="arrow arrow-right" />
+      <img :src="iconArrow" alt="" class="arrow" @click="handleChange(-1)" />
+      <i class="label">{{
+        StstemIdMapName[currentSystem.system_id].label || currentSystem.system_name
+      }}</i>
+      <img
+        :src="iconArrow"
+        alt=""
+        class="arrow arrow-right"
+        @click="handleChange(1)"
+      />
     </div>
     <div class="box-box">
       <RightBoxItem label="日归集量" :count="1561" />
@@ -24,7 +31,7 @@
       <BaseLabel label="累计归集量" icon="rect" />
     </div>
     <!-- 柱状图 -->
-    <BarChart />
+    <BarChart :dataList="currentSystem.count_map_list" />
   </div>
 </template>
 
@@ -36,6 +43,8 @@ import iconArrow from "@/assets/right_images/icon-arrow.png";
 import RightBoxItem from "./right-box-item.vue";
 import RingChart from "./ring-chart.vue";
 import BarChart from "./bar-chart.vue";
+import { mapGetters } from "vuex";
+import { StstemIdMapName } from "@/config/constent";
 export default {
   components: {
     BaseCount,
@@ -44,10 +53,75 @@ export default {
     RingChart,
     BarChart,
   },
+  computed: {
+    ...mapGetters({
+      countSystemData: "countSystemData",
+      systemIndex: "systemIndex",
+    }),
+  },
+  watch: {
+    currentSystem() {
+      this.initStytem();
+    },
+  },
   data() {
+    this.StstemIdMapName = StstemIdMapName;
     this.iconChange = iconChange;
     this.iconArrow = iconArrow;
-    return {};
+    return {
+      currentSystem: {
+        count_num: 510,
+        chain: 0,
+        day_sync_num: 264,
+        day_fill_num: 266,
+        day_audit_num: 64,
+        system_id: 1,
+        system_name: "排污许可证系统",
+        day_sync_success_num: 22,
+        day_in_num: 246,
+        grew: 100,
+        count_map_list: [
+          {
+            countName: "累计填报量",
+            count_map_num: 0,
+          },
+          {
+            countName: "办件同步量",
+            count_map_num: 0,
+          },
+          {
+            countName: "办件同步成功量",
+            count_map_num: 0,
+          },
+          {
+            countName: "证照同步量",
+            count_map_num: 0,
+          },
+          {
+            countName: "证照同步成功量",
+            count_map_num: 0,
+          },
+        ],
+      },
+    };
+  },
+  methods: {
+    initStytem() {
+      if (this.countSystemData.length > 0) {
+        this.currentSystem = this.countSystemData[this.systemIndex];
+      }
+    },
+    handleChange(num) {
+      let index = this.systemIndex;
+      index += num;
+      if (index < 0) {
+        index = this.countSystemData.length - 1;
+      } else if (index >= this.countSystemData.length) {
+        index = 0;
+      }
+      this.currentSystem = this.countSystemData[index];
+      this.$store.commit(setSystemIndex, index);
+    },
   },
 };
 </script>
@@ -108,6 +182,7 @@ export default {
     }
     .arrow {
       width: vw(21);
+      cursor: pointer;
       &.arrow-right {
         transform: scale(-1, 1);
       }

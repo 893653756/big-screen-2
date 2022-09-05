@@ -7,7 +7,7 @@
       <!-- <span>{{ numList }}</span> -->
     </div>
     <slot name="unit">
-      <span class="default-unit">万条</span>
+      <span class="default-unit">条</span>
     </slot>
   </div>
 </template>

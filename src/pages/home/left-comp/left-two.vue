@@ -12,6 +12,8 @@ import ItemTitle from "@/components/ItemTitle/index.vue";
 import CommonPanel from "@/components/CommonPanel/index.vue";
 import CommonChart from "@/components/CommonChart/index.vue";
 import { echartMapPx } from "@/utils";
+import { mapGetters } from "vuex";
+import { StstemIdMapName } from "@/config/constent";
 export default {
   components: {
     CommonPanel,
@@ -23,19 +25,25 @@ export default {
       option: {},
     };
   },
-  mounted() {
-    this.initData();
+  computed: {
+    ...mapGetters({
+      dataList: "letTwoData",
+    }),
+  },
+  watch: {
+    dataList() {
+      this.initData();
+    },
   },
   methods: {
     initData() {
-      this.dataList = [
-        { value: 456, name: "辐射安全" },
-        { value: 215, name: "企业排污" },
-        { value: 233, name: "环境评价" },
-        { value: 353, name: "应急预案" },
-        { value: 394, name: "等级表备案" },
-      ];
-      this.getOption(this.dataList);
+      let list = this.dataList.map((item) => {
+        return {
+          name: StstemIdMapName[item.system_id].label || item.system_name,
+          value: item.day_in_num,
+        };
+      });
+      this.getOption(list);
     },
     getOption(dataList) {
       this.option = {

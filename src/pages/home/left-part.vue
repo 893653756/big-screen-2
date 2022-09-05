@@ -2,10 +2,10 @@
   <div class="program-left">
     <!-- 时间 -->
     <div class="time-box">
-      <span class="time">10:30:31</span>
+      <span class="time">{{ currentTime }}</span>
       <div></div>
-      <span class="week">星期六</span>
-      <span class="date">2022年8月23日</span>
+      <span class="week">{{ currentWeek }}</span>
+      <span class="date">{{ currentDate }}</span>
     </div>
     <div class="line"></div>
     <div class="program-left-body">
@@ -20,11 +20,45 @@
 import LeftOne from "./left-comp/left-one.vue";
 import LeftTwo from "./left-comp/left-two.vue";
 import LeftThree from "./left-comp/left-three.vue";
+import dayjs from "dayjs";
 export default {
   components: {
     LeftOne,
     LeftTwo,
     LeftThree,
+  },
+  data() {
+    this.weekMap = {
+      1: "一",
+      2: "二",
+      3: "三",
+      4: "四",
+      5: "五",
+      6: "六",
+      7: "日",
+    };
+    return {
+      currentTime: "",
+      currentDate: "",
+      currentWeek: "",
+    };
+  },
+  mounted() {
+    this.timer = setInterval(() => {
+      this.initTime();
+    }, 1000);
+  },
+  beforeDestroy() {
+    this.timer = clearInterval(this.timer);
+  },
+  methods: {
+    initTime() {
+      let d = dayjs();
+      this.currentTime = d.format("HH:mm:ss");
+      this.currentDate = d.format("YYYY年MM月DD日");
+      let week = d.day();
+      this.currentWeek = `星期${this.weekMap[week]}`;
+    },
   },
 };
 </script>

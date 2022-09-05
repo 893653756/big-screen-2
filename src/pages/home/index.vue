@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import mockData from '@/utils/data'
 import LeftPart from "./left-part.vue";
 import RightPart from "./right-part.vue";
 import CenterPart from "./center-part.vue";
@@ -33,11 +34,18 @@ export default {
     return {};
   },
   mounted() {
-    this.demoApi();
+    this.getData();
   },
   methods: {
-    demoApi() {
-      instance.get("/api/qqq");
+    async getData() {
+      try {
+        // const res = await instance.get("/collecting/info");
+        const res = mockData
+        console.log(res);
+        this.$store.commit("setBgScreenData", res);
+      } catch (error) {
+        console.error(error);
+      }
     },
   },
 };

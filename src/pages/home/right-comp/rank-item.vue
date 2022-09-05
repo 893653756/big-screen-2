@@ -6,7 +6,7 @@
     <!-- <img src="" alt=""> -->
     <div class="rank-item_icon"></div>
     <div class="rank-item_desc">
-      <div v-for="text of rankInfo.desc" :key="text">{{ text }}</div>
+      <div>{{ rankInfo.desc }}</div>
     </div>
     <BaseCount :count="rankInfo.count" class="rank-item_value">
       <span slot="unit">次访问</span>

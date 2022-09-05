@@ -18,6 +18,7 @@ import CommonPanel from "@/components/CommonPanel/index.vue";
 import CommonChart from "@/components/CommonChart/index.vue";
 import LegendTree from "@/components/LegendTree";
 import { echartMapPx } from "@/utils";
+import { mapGetters } from "vuex";
 export default {
   components: {
     CommonPanel,
@@ -31,56 +32,73 @@ export default {
       dataTree: [],
     };
   },
-  mounted() {
-    this.initData();
+  computed: {
+    ...mapGetters({
+      errorLog: "letThreeData",
+    }),
+  },
+  watch: {
+    errorLog() {
+      this.initData();
+    },
   },
   methods: {
     initData() {
-      this.dataTree = [
-        {
-          name: "业务流程类",
-          value: 1,
-          children: [
-            {
-              name: "数据填报异常",
-              value: 1,
-              children: [
-                {
-                  name: "办证办结异常",
-                  value: 1,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "网络传输类",
-          value: 1,
-          children: [
-            {
-              name: "网络超时异常",
-              value: 1,
-              children: [
-                {
-                  name: "系统接口异常",
-                  value: 1,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          name: "其它问题类",
-          value: 1,
-          children: [
-            {
-              name: "证照日期异常",
-              value: 1,
-            },
-          ],
-        },
-      ];
+      this.dataTree = this.dealWithErrorLog(this.errorLog);
+      // this.dataTree = [
+      //   {
+      //     name: "业务流程类",
+      //     value: 1,
+      //     children: [
+      //       {
+      //         name: "数据填报异常",
+      //         value: 1,
+      //         children: [
+      //           {
+      //             name: "办证办结异常",
+      //             value: 1,
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     name: "网络传输类",
+      //     value: 1,
+      //     children: [
+      //       {
+      //         name: "网络超时异常",
+      //         value: 1,
+      //         children: [
+      //           {
+      //             name: "系统接口异常",
+      //             value: 1,
+      //           },
+      //         ],
+      //       },
+      //     ],
+      //   },
+      //   {
+      //     name: "其它问题类",
+      //     value: 1,
+      //     children: [
+      //       {
+      //         name: "证照日期异常",
+      //         value: 1,
+      //       },
+      //     ],
+      //   },
+      // ];
       this.getOption(this.dataTree);
+    },
+    dealWithErrorLog(list) {
+      if (Array.isArray(list)) {
+        return list.map((item) => ({
+          value: item.day_error_sum,
+          name: item.main_type,
+          children: this.dealWithErrorLog(item.day_err_type_list),
+        }));
+      }
     },
     getOption(dataTree) {
       this.option = {

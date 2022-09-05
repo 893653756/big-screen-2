@@ -13,7 +13,7 @@
     </div>
     <!-- 排行 -->
     <div class="rank-box">
-      <div class="rank-box_title">访问量排名TOP3</div>
+      <div class="rank-box_title">访问量排名TOP{{ rankList.length }}</div>
       <div class="rank-info">
         <RankItem v-for="item of rankList" :key="item.rank" :rankInfo="item" />
       </div>
@@ -25,34 +25,60 @@
 import BaseCount from "@/components/BaseCount";
 import BaseLabel from "@/components/BaseLabel";
 import RankItem from "./rank-item.vue";
+import { mapGetters } from "vuex";
+import { StstemIdMapName } from "@/config/constent";
 export default {
   components: {
     BaseCount,
     BaseLabel,
     RankItem,
   },
+  computed: {
+    ...mapGetters({
+      systemSpecialData: "systemSpecialData",
+      rankData: "rankData",
+    }),
+    dataList() {
+      let { special_num, getway_num, pv_num } = this.systemSpecialData;
+      return [
+        { label: "特色应用数", count: special_num, unit: "个", icon: "xxx" },
+        { label: "累计访问量", count: pv_num, unit: "条", icon: "xxx" },
+        { label: "网关代理量", count: getway_num, unit: "条", icon: "xxx" },
+      ];
+    },
+    rankList() {
+      return this.rankData.map((item, index) => {
+        return {
+          rank: index + 1,
+          icon: item.system_pic,
+          desc: StstemIdMapName[item.system_id].label || item.system_name,
+          count: item.system_pv,
+        };
+      });
+    },
+  },
   data() {
     return {
-      dataList: [
-        { label: "特色应用数", count: 32, unit: "个", icon: "xxx" },
-        { label: "累计访问量", count: 47, unit: "万条", icon: "xxx" },
-        { label: "网关代理量", count: 30, unit: "万条", icon: "xxx" },
-      ],
-      rankList: [
-        { rank: 1, icon: "xx", desc: ["“三线一单” 符合性分析"], count: 12345 },
-        {
-          rank: 2,
-          icon: "xx",
-          desc: ["四川省“三线一单” 数据分析系统"],
-          count: 10375,
-        },
-        {
-          rank: 3,
-          icon: "xx",
-          desc: ["建设项目", "环评公示"],
-          count: 10105,
-        },
-      ],
+      // dataList: [
+      //   { label: "特色应用数", count: 32, unit: "个", icon: "xxx" },
+      //   { label: "累计访问量", count: 47, unit: "万条", icon: "xxx" },
+      //   { label: "网关代理量", count: 30, unit: "万条", icon: "xxx" },
+      // ],
+      // rankList: [
+      //   { rank: 1, icon: "xx", desc: ["“三线一单” 符合性分析"], count: 12345 },
+      //   {
+      //     rank: 2,
+      //     icon: "xx",
+      //     desc: ["四川省“三线一单” 数据分析系统"],
+      //     count: 10375,
+      //   },
+      //   {
+      //     rank: 3,
+      //     icon: "xx",
+      //     desc: ["建设项目", "环评公示"],
+      //     count: 10105,
+      //   },
+      // ],
     };
   },
 };

@@ -31,7 +31,12 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
-    return response;
+    let { status, data } = response;
+    if (status === 200) {
+      return data;
+    } else {
+      return Promise.reject(response);
+    }
   },
   (error) => {
     console.log(error);
