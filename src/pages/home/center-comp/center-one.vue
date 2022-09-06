@@ -40,7 +40,7 @@
 import BaseCountTwo from "@/components/BaseCountTwo";
 import LabelCount from "@/components/LabelCount";
 import { mapGetters } from "vuex";
-import { StstemIdMapName } from "@/config/constent";
+import { StstemIdMapName } from "@/config/constant";
 export default {
   components: {
     BaseCountTwo,

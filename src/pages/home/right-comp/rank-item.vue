@@ -3,8 +3,8 @@
     <div class="rank-item_rank" ysbth :class="'rank-' + rankInfo.rank">
       {{ rankNum }}
     </div>
-    <!-- <img src="" alt=""> -->
-    <div class="rank-item_icon"></div>
+    <img :src="rankInfo.icon" alt="" class="rank-item_icon">
+    <!-- <div class="rank-item_icon"></div> -->
     <div class="rank-item_desc">
       <div>{{ rankInfo.desc }}</div>
     </div>
@@ -70,7 +70,7 @@ export default {
   &_icon {
     width: vh(37);
     height: vh(37);
-    background-color: pink;
+    // background-color: pink;
     margin-top: vh(38.5);
   }
   &_desc {

@@ -2,7 +2,7 @@
   <div class="box-item">
     <div class="text">{{ label }}</div>
     <BaseCount :count="count">
-      <span slot="unit">万条</span>
+      <span slot="unit">条</span>
     </BaseCount>
   </div>
 </template>

@@ -9,7 +9,8 @@
     <div class="tab-box">
       <img :src="iconArrow" alt="" class="arrow" @click="handleChange(-1)" />
       <i class="label">{{
-        StstemIdMapName[currentSystem.system_id].label || currentSystem.system_name
+        StstemIdMapName[currentSystem.system_id].label ||
+        currentSystem.system_name
       }}</i>
       <img
         :src="iconArrow"
@@ -19,15 +20,18 @@
       />
     </div>
     <div class="box-box">
-      <RightBoxItem label="日归集量" :count="1561" />
-      <RightBoxItem label="日回流量" :count="831" />
-      <RightBoxItem label="日同步量" :count="473" />
+      <RightBoxItem
+        v-for="item of cardList"
+        :label="item.label"
+        :key="item.prop + '_' + currentSystem.system_id"
+        :count="currentSystem[item.prop]"
+      />
     </div>
     <!-- 圆环图 -->
-    <RingChart />
+    <RingChart :chain="currentSystem.chain" :grew="currentSystem.grew" />
     <!-- 累计归集量 -->
     <div class="total-box">
-      <BaseCount :count="90"></BaseCount>
+      <BaseCount :count="currentSystem.count_num"></BaseCount>
       <BaseLabel label="累计归集量" icon="rect" />
     </div>
     <!-- 柱状图 -->
@@ -44,7 +48,7 @@ import RightBoxItem from "./right-box-item.vue";
 import RingChart from "./ring-chart.vue";
 import BarChart from "./bar-chart.vue";
 import { mapGetters } from "vuex";
-import { StstemIdMapName } from "@/config/constent";
+import { StstemIdMapName } from "@/config/constant";
 export default {
   components: {
     BaseCount,
@@ -58,28 +62,59 @@ export default {
       countSystemData: "countSystemData",
       systemIndex: "systemIndex",
     }),
+    cardList() {
+      const systemId = this.currentSystem.system_id;
+      return this.systemIdMap[systemId];
+    },
   },
   watch: {
-    currentSystem() {
+    countSystemData() {
       this.initStytem();
+    },
+    systemIndex() {
+      if (this.countSystemData.length > 0) {
+        this.initStytem();
+      }
     },
   },
   data() {
+    let list_01 = [
+      { label: "日归集量", prop: "day_in_num" },
+      { label: "日回流量", prop: "day_gc_backflow_num" },
+      { label: "日同步量", prop: "day_sync_num" },
+    ];
+    let list_02 = [
+      { label: "日填报量", prop: "day_fill_num" },
+      { label: "日审批量", prop: "day_audit_num" },
+      { label: "日同步量", prop: "day_sync_num" },
+    ];
+    let list_03 = [
+      { label: "日接入量", prop: "day_in_num" },
+      { label: "日同步量", prop: "day_sync_num" },
+      { label: "日同步成功量", prop: "day_sync_success_num" },
+    ];
+    this.systemIdMap = {
+      1: list_03,
+      2: list_03,
+      3: list_02,
+      4: list_01,
+      5: list_03,
+    };
     this.StstemIdMapName = StstemIdMapName;
     this.iconChange = iconChange;
     this.iconArrow = iconArrow;
     return {
       currentSystem: {
-        count_num: 510,
+        count_num: 0,
         chain: 0,
-        day_sync_num: 264,
-        day_fill_num: 266,
-        day_audit_num: 64,
+        day_sync_num: 0,
+        day_fill_num: 0,
+        day_audit_num: 0,
         system_id: 1,
         system_name: "排污许可证系统",
-        day_sync_success_num: 22,
-        day_in_num: 246,
-        grew: 100,
+        day_sync_success_num: 0,
+        day_in_num: 0,
+        grew: 0,
         count_map_list: [
           {
             countName: "累计填报量",
@@ -119,8 +154,7 @@ export default {
       } else if (index >= this.countSystemData.length) {
         index = 0;
       }
-      this.currentSystem = this.countSystemData[index];
-      this.$store.commit(setSystemIndex, index);
+      this.$store.commit("setSystemIndex", index);
     },
   },
 };

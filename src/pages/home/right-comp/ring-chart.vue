@@ -11,8 +11,28 @@ import { echartMapPx } from "@/utils";
 import iconUp from "@/assets/right_images/icon-up.png";
 import iconDown from "@/assets/right_images/icon-down.png";
 export default {
+  props: {
+    // 环比
+    chain: {
+      type: [String, Number],
+      default: 0,
+    },
+    // 同比
+    grew: {
+      type: [String, Number],
+      default: 0,
+    },
+  },
   components: {
     CommonChart,
+  },
+  watch: {
+    chain() {
+      this.initData();
+    },
+    grew() {
+      this.initData();
+    },
   },
   data() {
     return {
@@ -27,15 +47,15 @@ export default {
     initData() {
       this.optionLeft = this.getOption({
         text: "同比",
-        percent: "30%",
-        value: 60,
-        icon: iconUp,
+        percent: this.grew + "%",
+        value: this.grew,
+        icon: this.grew >= 0 ? iconUp : iconDown,
       });
       this.optionRight = this.getOption({
         text: "环比",
-        percent: "15%",
-        value: 30,
-        icon: iconDown,
+        percent: this.chain + "%",
+        value: this.chain,
+        icon: this.chain >= 0 ? iconUp : iconDown,
       });
     },
     getOption(dataObj) {

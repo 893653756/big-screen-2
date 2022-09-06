@@ -13,7 +13,7 @@ import CommonPanel from "@/components/CommonPanel/index.vue";
 import CommonChart from "@/components/CommonChart/index.vue";
 import { echartMapPx } from "@/utils";
 import { mapGetters } from "vuex";
-import { StstemIdMapName } from "@/config/constent";
+import { StstemIdMapName } from "@/config/constant";
 export default {
   components: {
     CommonPanel,

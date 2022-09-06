@@ -11,6 +11,7 @@
 import ItemTitle from "@/components/ItemTitle/index.vue";
 import CommonChart from "@/components/CommonChart";
 import { echartMapPx } from "@/utils";
+import instance from "@/utils/request";
 export default {
   components: {
     ItemTitle,
@@ -25,8 +26,20 @@ export default {
     this.initData();
   },
   methods: {
-    initData() {
-      this.dataList = this.getDateRange(30).map((d) => {
+    async initData() {
+      // let dateRange = this.getDateRange(15);
+      // try {
+      //   const res = await instance.get("/collecting/find", {
+      //     params: {
+      //       startDate: dateRange[0],
+      //       endDate: dateRange[dateRange.length - 1],
+      //     },
+      //   });
+      //   console.log("res", res);
+      // } catch (error) {
+      //   console.error(error);
+      // }
+      this.dataList = this.getDateRange(15).map((d) => {
         return {
           name: d,
           value: Math.floor(Math.random() * 400 + 400),
@@ -40,15 +53,14 @@ export default {
       let endDate = new Date();
       startDate.setDate(endDate.getDate() - value);
       while (endDate.getTime() - startDate.getTime() >= 0) {
-        let month =
-          (startDate.getMonth() + 1).toString().length === 1
-            ? "0" + (startDate.getMonth() + 1).toString()
-            : startDate.getMonth() + 1;
-        let day =
-          startDate.getDate().toString().length === 1
-            ? "0" + startDate.getDate()
-            : startDate.getDate();
-        dateRange.push(month + "-" + day);
+        let year = startDate.getFullYear();
+        let month = startDate.getMonth() + 1;
+        month = month < 10 ? `0${month}` : month;
+
+        let day = startDate.getDate();
+        day = day < 10 ? `0${day}` : day;
+        // dateRange.push(year-month + "-" + day);
+        dateRange.push(`${year}-${month}-${day}`);
         startDate.setDate(startDate.getDate() + 1);
       }
       return dateRange;
@@ -108,6 +120,7 @@ export default {
           {
             type: "bar",
             barWidth: echartMapPx.mapWidth(11),
+            stack: 'total',
             label: {
               show: true,
               position: "top",

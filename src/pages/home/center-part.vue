@@ -14,11 +14,12 @@
           <span class="label">国垂系统深度对接</span>
         </div>
         <CircleItem
+          @click.native="handleClick(index)"
           v-for="(item, index) of appList"
           :icon="item.icon"
           :key="item.text"
           :text="item.text"
-          :isActive="item.active"
+          :isActive="index == systemIndex"
           :class="'circle-' + (index + offset)"
         />
       </div>
@@ -34,7 +35,7 @@ import CenterThree from "./center-comp/center-three.vue";
 import centerBg from "@/assets/center_images/center-bg.png";
 import reflectionBg from "@/assets/center_images/reflection-bg.png";
 import { mapGetters } from "vuex";
-import { StstemIdMapName } from "@/config/constent";
+import { StstemIdMapName } from "@/config/constant";
 export default {
   components: {
     CenterOne,
@@ -70,6 +71,13 @@ export default {
     //   { text: "企业排污", icon: "qypw", active: false },
     // ];
     return {};
+  },
+  methods: {
+    handleClick(index) {
+      if (this.systemIndex !== index) {
+        this.$store.commit("setSystemIndex", index);
+      }
+    },
   },
 };
 </script>

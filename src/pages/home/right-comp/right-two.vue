@@ -26,7 +26,7 @@ import BaseCount from "@/components/BaseCount";
 import BaseLabel from "@/components/BaseLabel";
 import RankItem from "./rank-item.vue";
 import { mapGetters } from "vuex";
-import { StstemIdMapName } from "@/config/constent";
+import { StstemIdMapName } from "@/config/constant";
 export default {
   components: {
     BaseCount,
