@@ -1,13 +1,14 @@
 <template>
   <div>
-    <ItemTitle label="各系统汇聚量占比" />
+    <ItemTitle label="失败原因占比分析" />
     <CommonPanel class="panel">
-      <div class="body-box">
+      <div class="body-box" v-if="errorLog.length > 0">
         <CommonChart :option="option" class="common-chart" />
         <div class="tree-box">
           <LegendTree :tree-data="dataTree" />
         </div>
       </div>
+      <div v-else class="no-data" ysbth>暂无数据</div>
     </CommonPanel>
   </div>
 </template>
@@ -162,6 +163,15 @@ export default {
 .panel {
   height: vh(251);
   margin-top: vh(14);
+  .no-data {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: vw(25);
+    color: #92dcff;
+  }
   .body-box {
     height: 100%;
     width: 100%;

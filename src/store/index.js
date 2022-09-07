@@ -45,6 +45,11 @@ export default new Vuex.Store({
     centerData: (state) => {
       return state.countData;
     },
+    // 堆叠图数据
+    dayNumList: (state) => {
+      let { day_num_list = [] } = state.countData;
+      return day_num_list
+    },
     // 系统变换右侧数据
     countSystemData: (state) => {
       return state.countSystemData;

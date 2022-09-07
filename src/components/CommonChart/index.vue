@@ -43,7 +43,7 @@ export default {
     },
     renderChart() {
       if (this.chart && Object.keys(this.option).length) {
-        this.chart.setOption(this.option);
+        this.chart.setOption(this.option,true);
       }
     },
     resize() {

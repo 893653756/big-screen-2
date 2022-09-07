@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import mockData from "@/utils/data";
 import LeftPart from "./left-part.vue";
 import RightPart from "./right-part.vue";
 import CenterPart from "./center-part.vue";
@@ -40,8 +39,7 @@ export default {
     async getData() {
       try {
         const res = await instance.get("/collecting/info");
-        // const res = mockData
-        console.log(res);
+        // console.log(res);
         this.$store.commit("setBgScreenData", res[0]);
       } catch (error) {
         console.error(error);

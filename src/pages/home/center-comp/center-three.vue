@@ -11,7 +11,7 @@
 import ItemTitle from "@/components/ItemTitle/index.vue";
 import CommonChart from "@/components/CommonChart";
 import { echartMapPx } from "@/utils";
-import instance from "@/utils/request";
+import { mapGetters } from "vuex";
 export default {
   components: {
     ItemTitle,
@@ -22,54 +22,56 @@ export default {
       option: {},
     };
   },
+  computed: {
+    ...mapGetters({
+      dayNumList: "dayNumList",
+    }),
+  },
+  watch: {
+    dayNumList() {
+      this.initData();
+    },
+  },
   mounted() {
     this.initData();
   },
   methods: {
     async initData() {
-      // let dateRange = this.getDateRange(15);
-      // try {
-      //   const res = await instance.get("/collecting/find", {
-      //     params: {
-      //       startDate: dateRange[0],
-      //       endDate: dateRange[dateRange.length - 1],
-      //     },
-      //   });
-      //   console.log("res", res);
-      // } catch (error) {
-      //   console.error(error);
-      // }
-      this.dataList = this.getDateRange(15).map((d) => {
-        return {
-          name: d,
-          value: Math.floor(Math.random() * 400 + 400),
-        };
+      let times = [];
+      let data1 = [];
+      let data2 = [];
+      this.dayNumList.forEach((item, index) => {
+        times.unshift(item.date.slice(5));
+        data1.unshift(item.day_in_num || 0);
+        data2.unshift(item.day_sync_num || 0);
       });
-      this.option = this.getOption(this.dataList);
+      this.option = this.getOption(times, data1, data2);
     },
-    getDateRange(value) {
-      let dateRange = [];
-      let startDate = new Date();
-      let endDate = new Date();
-      startDate.setDate(endDate.getDate() - value);
-      while (endDate.getTime() - startDate.getTime() >= 0) {
-        let year = startDate.getFullYear();
-        let month = startDate.getMonth() + 1;
-        month = month < 10 ? `0${month}` : month;
+    // getDateRange(value) {
+    //   let dateRange = [];
+    //   let startDate = new Date();
+    //   let endDate = new Date();
+    //   startDate.setDate(endDate.getDate() - value);
+    //   while (endDate.getTime() - startDate.getTime() >= 0) {
+    //     let year = startDate.getFullYear();
+    //     let month = startDate.getMonth() + 1;
+    //     month = month < 10 ? `0${month}` : month;
 
-        let day = startDate.getDate();
-        day = day < 10 ? `0${day}` : day;
-        // dateRange.push(year-month + "-" + day);
-        dateRange.push(`${year}-${month}-${day}`);
-        startDate.setDate(startDate.getDate() + 1);
-      }
-      return dateRange;
-    },
-    getOption(dataList) {
+    //     let day = startDate.getDate();
+    //     day = day < 10 ? `0${day}` : day;
+    //     // dateRange.push(year-month + "-" + day);
+    //     dateRange.push(`${year}-${month}-${day}`);
+    //     startDate.setDate(startDate.getDate() + 1);
+    //   }
+    //   return dateRange;
+    // },
+    getOption(times, data1, data2) {
       return {
+        tooltip: {},
+        color: ["#D3F9FF", "#9ff2fe"],
         xAxis: {
           type: "category",
-          data: dataList.map((item) => item.name),
+          data: times,
           axisTick: {
             show: false,
           },
@@ -82,6 +84,11 @@ export default {
             color: "#BEECFF",
             fontSize: echartMapPx.mapWidth(14),
             margin: echartMapPx.mapHeight(12.5),
+          },
+        },
+        legend: {
+          textStyle: {
+            color: "#ffffff",
           },
         },
         grid: {
@@ -119,24 +126,33 @@ export default {
         series: [
           {
             type: "bar",
-            barWidth: echartMapPx.mapWidth(11),
-            stack: 'total',
-            label: {
-              show: true,
-              position: "top",
-              distance: echartMapPx.mapHeight(6),
-              color: "#fff",
-              fontSize: echartMapPx.mapWidth(10),
+            name: "日接入量",
+            barWidth: echartMapPx.mapWidth(16),
+            stack: "total",
+            // label: {
+            //   show: true,
+            //   fontSize: echartMapPx.mapWidth(10),
+            // },
+            color: "#D3F9FF",
+            emphasis: {
+              focus: "series",
             },
-            data: dataList.map((item) => {
-              return {
-                value: item.value,
-                itemStyle: {
-                  barBorderRadius: echartMapPx.mapWidth(5),
-                  color: "#D3F9FF",
-                },
-              };
-            }),
+            data: data1,
+          },
+          {
+            type: "bar",
+            name: "日同步量",
+            barWidth: echartMapPx.mapWidth(16),
+            stack: "total",
+            // label: {
+            //   show: true,
+            //   fontSize: echartMapPx.mapWidth(10),
+            // },
+            color: ["#9ff2fe"],
+            emphasis: {
+              focus: "series",
+            },
+            data: data2,
           },
         ],
       };
