@@ -10,7 +10,7 @@
       :class="{ 'has-unit': showUnit }"
     />
     <slot name="unit">
-      <span class="default-unit">万条</span>
+      <span class="default-unit">条</span>
     </slot>
   </div>
 </template>

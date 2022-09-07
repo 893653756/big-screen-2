@@ -61,8 +61,8 @@ export default {
     return {
       // dataList: [
       //   { label: "特色应用数", count: 32, unit: "个", icon: "xxx" },
-      //   { label: "累计访问量", count: 47, unit: "万条", icon: "xxx" },
-      //   { label: "网关代理量", count: 30, unit: "万条", icon: "xxx" },
+      //   { label: "累计访问量", count: 47, unit: "条", icon: "xxx" },
+      //   { label: "网关代理量", count: 30, unit: "条", icon: "xxx" },
       // ],
       // rankList: [
       //   { rank: 1, icon: "xx", desc: ["“三线一单” 符合性分析"], count: 12345 },

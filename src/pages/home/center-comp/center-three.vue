@@ -100,7 +100,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          name: "(万项)",
+          name: "(条)",
           nameLocation: "end",
           nameTextStyle: {
             color: "#73B8FF",
